@@ -1,0 +1,23 @@
+# ===== C 编译产物 =====
+*.o
+*.obj
+*.out
+*.exe
+*.a
+*.so
+*.elf
+*.bin
+*.img
+
+# ===== 构建目录 =====
+build/
+
+# ===== 编辑器 / IDE =====
+.vscode/
+*.swp
+*.swo
+*~
+
+# ===== 系统 =====
+.DS_Store
+Thumbs.db
