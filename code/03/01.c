@@ -1,6 +1,11 @@
 #include <stdio.h>
+int counter(void){
+    static int n = 0;
+    return ++n;
+}
 int main(void){
-    int a[3] = {10, 20, 30};
-    int *p = a;
-    printf("%d %d\n",*p,*(p+2));
+    printf("%d\n",counter());
+    printf("%d\n",counter());
+    printf("%d\n",counter());
+    return 0;
 }
