@@ -1,23 +1,15 @@
-# ===== C 编译产物 =====
-*.o
-*.obj
+# code/ 下只跟踪源码和文档，忽略所有编译产物（无后缀二进制、.i/.s/.o 等）
+code/**/*
+!code/**/
+!code/**/*.c
+!code/**/*.cpp
+!code/**/*.h
+!code/**/*.hpp
+!code/**/*.md
+code/**/*.o
+code/**/*.i
+code/**/*.s
+
+# 常见杂项
 *.out
-*.exe
-*.a
-*.so
-*.elf
-*.bin
-*.img
-
-# ===== 构建目录 =====
-build/
-
-# ===== 编辑器 / IDE =====
-.vscode/
-*.swp
-*.swo
-*~
-
-# ===== 系统 =====
-.DS_Store
-Thumbs.db
+a.out
