@@ -1,7 +1,7 @@
 # 作业 10：Linux 命令行与 shell 基础
 
 > 本课作业**全是实操**：每题在终端里跑，把"你实际敲的命令"贴进答案。不用预测——目标是手感。
-> 只把"卡住的 / 想确认的"发我。配套讲义：`课本/10-命令行与shell基础.md`。
+> 只把"卡住的 / 想确认的"发我。配套讲义：`课本/03-Linux/10-命令行与shell基础.md`。
 
 ---
 
@@ -115,10 +115,10 @@ rep -rn "volatile" .
 ./笔记/要点.md:51:- `const volatile int *p` = 代码不许改（const）、硬件随时改（volatile）→ 只读状态寄存器
 ./笔记/要点.md:53:- 面试一句话：volatile 管优化，static 管生命周期+作用域，const 管只读
 ./作业/10-命令行与shell基础.md:60:a) 递归搜 `volatile`，显示行号，贴命令 + 命中几个文件
-./作业/10-命令行与shell基础.md:82:e) cat 课本/03-volatile-static-const.md | wc -l
+./作业/10-命令行与shell基础.md:82:e) cat 课本/01-C内功/03-volatile-static-const.md | wc -l
 ./作业/03-volatile-static-const.md:1:# 作业 03：volatile / static / const
 ./作业/03-volatile-static-const.md:3:> 本节 **volatile 的效果要在 `-O2` 下才明显，且很多题是概念题（没法直接跑）**——这正常，理解 WHY 比跑代码重要。static / const 的题可以跑。
-./作业/03-volatile-static-const.md:4:> 做完只把"卡住的 / 想确认的"发我。配套讲义：`课本/03-volatile-static-const.md`。
+./作业/03-volatile-static-const.md:4:> 做完只把"卡住的 / 想确认的"发我。配套讲义：`课本/01-C内功/03-volatile-static-const.md`。
 ./作业/03-volatile-static-const.md:17:**答**：这里中断把flag设成1之后，主代码也不会读到，while也不会停，成了死循环。怎么修：定义的时候，前面加上volatile int flag = 0;这样中断里flag被设成1的话，会从内存里读取到，停止循环；
 ./作业/03-volatile-static-const.md:22:"`volatile` 让变量的读写在单条指令内完成，不会被中断打断（即原子操作）。"
 ./作业/03-volatile-static-const.md:26:**答**：错，因为在c里，volatile只保证变量从内存中读写，并不保证其他，可能会被中断打断，不保证原子操作。
@@ -131,34 +131,34 @@ rep -rn "volatile" .
 ./作业/03-volatile-static-const.md:111:各用一句话说清 `volatile` / `static` / `const` 的作用（像面试那样口头表达）。
 ./作业/03-volatile-static-const.md:113:- volatile：修饰的变量会从内存里读取数据，而不是寄存器之类的
 ./作业/03-volatile-static-const.md:128:这么修改：volatile uint32_t *p = (volatile uint32_t*)0x40000000;
-./课本/02b-指针与数组.md:149:下一节进 **03：`volatile` / `static` / `const` 三个关键字**（嵌入式面试常驻考点，尤其 `volatile`）。
-./课本/10-命令行与shell基础.md:197:grep -rn "volatile" 课本/ | wc -l        # volatile 出现几次
-./课本/03-volatile-static-const.md:1:# 03 三个关键字：`volatile` / `static` / `const`
-./课本/03-volatile-static-const.md:3:> 这三个是 C 面试的常驻考点，嵌入式尤其爱考 `volatile`（它是嵌入式区别于纯软件的标志）。本节务必把"为什么"想透。
-./课本/03-volatile-static-const.md:7:- 理解 `volatile` 的作用、三大场景，以及它**不**保证什么
-./课本/03-volatile-static-const.md:13:1. `volatile` 是什么：阻止编译器优化，强制每次读写内存
-./课本/03-volatile-static-const.md:14:2. `volatile` 的三大使用场景：硬件寄存器 / 中断共享变量 / 多线程
-./课本/03-volatile-static-const.md:15:3. `volatile` 的经典坑（`while(flag)` 被优化成死循环）
-./课本/03-volatile-static-const.md:16:4. **`volatile` 不保证原子性、不保证线程安全**（面试最爱挖的坑）
-./课本/03-volatile-static-const.md:17:5. `const volatile` 组合：只读但会变（硬件状态寄存器）
-./课本/03-volatile-static-const.md:24:## 1. volatile 是什么　`[知识点1]`
-./课本/03-volatile-static-const.md:26:`volatile` 告诉编译器：**这个变量的值随时可能被"当前代码流之外"的力量改变，别自作主张优化它，每次都老老实实从内存读写，别缓存到寄存器。**
-./课本/03-volatile-static-const.md:29:volatile int flag;
-./课本/03-volatile-static-const.md:32:## 2. volatile 的三大使用场景　`[知识点2]`
-./课本/03-volatile-static-const.md:36:volatile uint32_t *gpio = (volatile uint32_t*)0x40021000;
-./课本/03-volatile-static-const.md:41:volatile int data_ready = 0;   // 中断里会置 1
-./课本/03-volatile-static-const.md:44:**③ 多线程共享变量**——（注意：见知识点 4，volatile 在这里不够用）
-./课本/03-volatile-static-const.md:46:## 3. volatile 的经典坑　`[知识点3]` ⭐面试高频
-./课本/03-volatile-static-const.md:54:修法：`volatile int flag = 0;`，编译器每次都重新从内存读 `flag`。
-./课本/03-volatile-static-const.md:56:> 想亲眼验证可以 `gcc -O2 -S` 看汇编：没 volatile 的版本 `flag` 只被读一次；volatile 的版本每次循环都重新 load。
-./课本/03-volatile-static-const.md:58:## 4. volatile 不保证原子性、不保证线程安全　`[知识点4]` ⭐面试最爱挖的坑
-./课本/03-volatile-static-const.md:62:- ❌ "volatile 让读写变成原子操作" → **错**。`volatile` 只防优化，**不保证一次读/写不被打断**。`volatile int64_t` 在 32 位机上读写仍可能被打断。
-./课本/03-volatile-static-const.md:63:- ❌ "volatile 能保证多线程安全" → **错**。它不保证**内存顺序**、不保证原子。多线程正确同步要靠**互斥锁 / 原子变量**。
-./课本/03-volatile-static-const.md:65:> 记住：**C 的 volatile ≠ Java 的 volatile**。C 的 volatile 只管"别优化、老实访问内存"，仅此而已。
-./课本/03-volatile-static-const.md:67:## 5. const volatile 组合　`[知识点5]`
-./课本/03-volatile-static-const.md:69:看起来矛盾，实则很常见：**"代码里不能改它（const），但它会被硬件改（volatile）"**——典型的**只读状态寄存器**。
-./课本/03-volatile-static-const.md:72:const volatile uint32_t *status = (const volatile uint32_t*)0x40021010;
-./课本/03-volatile-static-const.md:116:见 `作业/03-volatile-static-const.md`。**volatile 的效果要在 `-O2` 下才明显，且很多题是概念题（没法直接跑）——理解 WHY 比跑代码重要**；static / const 的题可以跑。
+./课本/01-C内功/02b-指针与数组.md:149:下一节进 **03：`volatile` / `static` / `const` 三个关键字**（嵌入式面试常驻考点，尤其 `volatile`）。
+./课本/03-Linux/10-命令行与shell基础.md:197:grep -rn "volatile" 课本/ | wc -l        # volatile 出现几次
+./课本/01-C内功/03-volatile-static-const.md:1:# 03 三个关键字：`volatile` / `static` / `const`
+./课本/01-C内功/03-volatile-static-const.md:3:> 这三个是 C 面试的常驻考点，嵌入式尤其爱考 `volatile`（它是嵌入式区别于纯软件的标志）。本节务必把"为什么"想透。
+./课本/01-C内功/03-volatile-static-const.md:7:- 理解 `volatile` 的作用、三大场景，以及它**不**保证什么
+./课本/01-C内功/03-volatile-static-const.md:13:1. `volatile` 是什么：阻止编译器优化，强制每次读写内存
+./课本/01-C内功/03-volatile-static-const.md:14:2. `volatile` 的三大使用场景：硬件寄存器 / 中断共享变量 / 多线程
+./课本/01-C内功/03-volatile-static-const.md:15:3. `volatile` 的经典坑（`while(flag)` 被优化成死循环）
+./课本/01-C内功/03-volatile-static-const.md:16:4. **`volatile` 不保证原子性、不保证线程安全**（面试最爱挖的坑）
+./课本/01-C内功/03-volatile-static-const.md:17:5. `const volatile` 组合：只读但会变（硬件状态寄存器）
+./课本/01-C内功/03-volatile-static-const.md:24:## 1. volatile 是什么　`[知识点1]`
+./课本/01-C内功/03-volatile-static-const.md:26:`volatile` 告诉编译器：**这个变量的值随时可能被"当前代码流之外"的力量改变，别自作主张优化它，每次都老老实实从内存读写，别缓存到寄存器。**
+./课本/01-C内功/03-volatile-static-const.md:29:volatile int flag;
+./课本/01-C内功/03-volatile-static-const.md:32:## 2. volatile 的三大使用场景　`[知识点2]`
+./课本/01-C内功/03-volatile-static-const.md:36:volatile uint32_t *gpio = (volatile uint32_t*)0x40021000;
+./课本/01-C内功/03-volatile-static-const.md:41:volatile int data_ready = 0;   // 中断里会置 1
+./课本/01-C内功/03-volatile-static-const.md:44:**③ 多线程共享变量**——（注意：见知识点 4，volatile 在这里不够用）
+./课本/01-C内功/03-volatile-static-const.md:46:## 3. volatile 的经典坑　`[知识点3]` ⭐面试高频
+./课本/01-C内功/03-volatile-static-const.md:54:修法：`volatile int flag = 0;`，编译器每次都重新从内存读 `flag`。
+./课本/01-C内功/03-volatile-static-const.md:56:> 想亲眼验证可以 `gcc -O2 -S` 看汇编：没 volatile 的版本 `flag` 只被读一次；volatile 的版本每次循环都重新 load。
+./课本/01-C内功/03-volatile-static-const.md:58:## 4. volatile 不保证原子性、不保证线程安全　`[知识点4]` ⭐面试最爱挖的坑
+./课本/01-C内功/03-volatile-static-const.md:62:- ❌ "volatile 让读写变成原子操作" → **错**。`volatile` 只防优化，**不保证一次读/写不被打断**。`volatile int64_t` 在 32 位机上读写仍可能被打断。
+./课本/01-C内功/03-volatile-static-const.md:63:- ❌ "volatile 能保证多线程安全" → **错**。它不保证**内存顺序**、不保证原子。多线程正确同步要靠**互斥锁 / 原子变量**。
+./课本/01-C内功/03-volatile-static-const.md:65:> 记住：**C 的 volatile ≠ Java 的 volatile**。C 的 volatile 只管"别优化、老实访问内存"，仅此而已。
+./课本/01-C内功/03-volatile-static-const.md:67:## 5. const volatile 组合　`[知识点5]`
+./课本/01-C内功/03-volatile-static-const.md:69:看起来矛盾，实则很常见：**"代码里不能改它（const），但它会被硬件改（volatile）"**——典型的**只读状态寄存器**。
+./课本/01-C内功/03-volatile-static-const.md:72:const volatile uint32_t *status = (const volatile uint32_t*)0x40021010;
+./课本/01-C内功/03-volatile-static-const.md:116:见 `作业/03-volatile-static-const.md`。**volatile 的效果要在 `-O2` 下才明显，且很多题是概念题（没法直接跑）——理解 WHY 比跑代码重要**；static / const 的题可以跑。
 grep: ./.git/index: binary file matches
 b)
 grep -r "知识点清单" . | wc -l
@@ -202,7 +202,7 @@ a) echo "hello" > f1.txt; cat f1.txt
 b) echo "world" >> f1.txt; cat f1.txt        # 注意和 a 的区别
 c) ls /notexist > f2.txt                      # 屏幕上有什么？f2.txt 里有什么？为什么？
 d) ls /notexist 2> f3.txt; cat f3.txt
-e) cat 课本/03-volatile-static-const.md | wc -l
+e) cat 课本/01-C内功/03-volatile-static-const.md | wc -l
 f) history | grep "chmod" | wc -l
 ```
 
@@ -279,7 +279,7 @@ git commit': git commit -m "day-2"
 统计 `~/project/02_teach/课本/` 下所有 md 文件里 `知识点` 一共出现多少次：
 
 **答**（贴命令和数字）：
-cat ~/project/02_teach/课本/*.md | grep "知识点" | wc -l
+cat ~/project/02_teach/课本/*/*.md | grep "知识点" | wc -l
 90
 ---
 

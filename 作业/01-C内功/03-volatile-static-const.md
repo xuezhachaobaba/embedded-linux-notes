@@ -1,7 +1,7 @@
 # 作业 03：volatile / static / const
 
 > 本节 **volatile 的效果要在 `-O2` 下才明显，且很多题是概念题（没法直接跑）**——这正常，理解 WHY 比跑代码重要。static / const 的题可以跑。
-> 做完只把"卡住的 / 想确认的"发我。配套讲义：`课本/03-volatile-static-const.md`。
+> 做完只把"卡住的 / 想确认的"发我。配套讲义：`课本/01-C内功/03-volatile-static-const.md`。
 
 ---
 
